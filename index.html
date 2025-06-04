@@ -9,14 +9,34 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(45deg, #ffffff, #663399);
       color: #222;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
+    }
+    
+    /* White banner at the top */
+    .top-banner {
+      width: 100%;
+      height: 2in; /* 2 inch white space */
+      background-color: white;
+      position: relative;
+    }
+    
+    /* Main content area with inverted gradient */
+    .content-area {
+      flex: 1;
+      width: 100%;
+      background: linear-gradient(to bottom, #663399, #ffffff); /* Vertical gradient: purple to white */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+      min-height: calc(100vh - 2in);
     }
     
     .nav {
@@ -63,21 +83,25 @@
       object-fit: cover;
       max-width: 400px;
     }
-      .robot-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto 2rem auto;
-  object-fit: contain;
+    
+    .robot-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 2rem auto;
+      object-fit: contain;
     }
+    
     h1 {
       font-size: 3rem;
       margin: 0.5rem 0;
     }
+    
     p {
       font-size: 1.25rem;
       max-width: 600px;
     }
+    
     .btn {
       margin-top: 2rem;
       padding: 0.75rem 1.5rem;
@@ -89,26 +113,33 @@
       text-decoration: none;
       cursor: pointer;
     }
+    
     .btn:hover {
       background-color: #371160;
     }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="#" class="nav-btn">Home</a>
-    <a href="#" class="nav-btn">About</a>
-    <a href="#" class="nav-btn">Services</a>
-    <a href="#" class="nav-btn contact">CONTACT</a>
-  </nav>
+  <!-- White banner at the top -->
+  <div class="top-banner">
+    <nav class="nav">
+      <a href="#" class="nav-btn">Home</a>
+      <a href="#" class="nav-btn">About</a>
+      <a href="#" class="nav-btn">Services</a>
+      <a href="#" class="nav-btn contact">CONTACT</a>
+    </nav>
+  </div>
   
-  <img src="aiori-logo-FULL.png" alt="aiori logo" class="logo" />
-  <img 
-  src="Texting_Robot.webp" 
-  sizes="100vw"
-  class="Texting_Robot"
-/>
-  <h1>You are Turing me on...</h1>
-  <a class="btn" href="mailto:hello@aiori.app">Contact the Creators</a>
+  <!-- Main content area with inverted gradient -->
+  <div class="content-area">
+    <img src="aiori-logo-FULL.png" alt="aiori logo" class="logo" />
+    <img 
+      src="Texting_Robot.webp" 
+      sizes="100vw"
+      class="Texting_Robot"
+    />
+    <h1>You are Turing me on...</h1>
+    <a class="btn" href="mailto:hello@aiori.app">Contact the Creators</a>
+  </div>
 </body>
 </html>
