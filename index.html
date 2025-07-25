@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AIORI</title>
+  <title>AIORI Early Access Registration</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div id="page-container">
     <div id="register-box">
-      <h2>Register for Early Access</h2>
+      <!-- Logo replaces the text heading -->
+      <img src="aiori_logo_FULL_WT_BG-05.png" alt="AIORI Logo" style="max-width: 100%; height: auto; margin-bottom: 1rem;" />
+      
       <form id="register-form">
         <input type="text" id="name" name="name" placeholder="Name" required autocomplete="name" />
         <input type="tel" id="phone" name="phone" placeholder="Phone Number" required autocomplete="tel" />
@@ -20,7 +22,7 @@
   </div>
 
   <!-- Thank You popup -->
-  <div id="thank-you-popup" role="dialog" aria-modal="true" aria-labelledby="thank-you-title" style="display:none;">
+  <div id="thank-you-popup" role="dialog" aria-modal="true" aria-labelledby="thank-you-title">
     <div class="popup-content">
       <h3 id="thank-you-title">Thank You for Registering!</h3>
       <button id="close-popup-btn">Close</button>
