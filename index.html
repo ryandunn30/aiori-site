@@ -2,144 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ultimate Turing Test</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-    
-    /* White banner at the top */
-    .top-banner {
-      width: 100%;
-      height: 2in; /* 2 inch white space */
-      background-color: white;
-      position: relative;
-    }
-    
-    /* Main content area with inverted gradient */
-    .content-area {
-      flex: 1;
-      width: 100%;
-      background: linear-gradient(to bottom, #663399, #ffffff); /* Vertical gradient: purple to white */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 0;
-      min-height: calc(100vh - 2in);
-    }
-    
-    .nav {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      gap: 1rem;
-      z-index: 100;
-    }
-    
-    .nav-btn {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      border: none;
-      background: transparent;
-      color: #333;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    
-    .nav-btn:hover {
-      color: #4b0082;
-    }
-    
-    .nav-btn.contact {
-      border: 2px solid #333;
-      border-radius: 4px;
-      padding: 0.4rem 1rem;
-    }
-    
-    .nav-btn.contact:hover {
-      border-color: #4b0082;
-      background-color: rgba(75, 0, 130, 0.1);
-    }
-    
-    .logo {
-      width: 100vw;
-      height: auto;
-      margin-bottom: 1.5rem;
-      border-radius: 12px;
-      object-fit: cover;
-      max-width: 400px;
-    }
-    
-    .robot-image {
-      width: 100%;
-      height: auto;
-      display: block;
-      margin: 0 auto 2rem auto;
-      object-fit: contain;
-    }
-    
-    h1 {
-      font-size: 3rem;
-      margin: 0.5rem 0;
-    }
-    
-    p {
-      font-size: 1.25rem;
-      max-width: 600px;
-    }
-    
-    .btn {
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border: none;
-      background-color: #4b0082;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    
-    .btn:hover {
-      background-color: #371160;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIORI Early Access Registration</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- White banner at the top -->
-  <div class="top-banner">
-    <nav class="nav">
-      <a href="#" class="nav-btn">Home</a>
-      <a href="#" class="nav-btn">About</a>
-      <a href="#" class="nav-btn">Services</a>
-      <a href="#" class="nav-btn contact">CONTACT</a>
-    </nav>
+  <div id="page-container">
+    <div id="register-box">
+      <h2>Register for Early Access</h2>
+      <form id="register-form">
+        <input type="text" id="name" name="name" placeholder="Name" required autocomplete="name" />
+        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required autocomplete="tel" />
+        <input type="email" id="email" name="email" placeholder="Email Address" required autocomplete="email" />
+        <button type="submit" id="submit-btn">Submit</button>
+      </form>
+    </div>
   </div>
-  
-  <!-- Main content area with inverted gradient -->
-  <div class="content-area">
-    <img src="aiori-logo-WT@3x.png" alt="aiori logo" class="logo" />
-    <img 
-      src="Texting_Robot.jpeg" 
-      sizes="100vw"
-      class="Texting_Robot"
-    />
-    <h1>You are Turing me on...</h1>
-    <a class="btn" href="mailto:hello@aiori.app">Contact the Creators</a>
+
+  <!-- Thank You popup -->
+  <div id="thank-you-popup" role="dialog" aria-modal="true" aria-labelledby="thank-you-title" style="display:none;">
+    <div class="popup-content">
+      <h3 id="thank-you-title">Thank You for Registering!</h3>
+      <button id="close-popup-btn">Close</button>
+    </div>
   </div>
+
+  <script>
+    const form = document.getElementById('register-form');
+    const thankYouPopup = document.getElementById('thank-you-popup');
+    const closePopupBtn = document.getElementById('close-popup-btn');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      thankYouPopup.style.display = 'flex';
+    });
+
+    closePopupBtn.addEventListener('click', () => {
+      thankYouPopup.style.display = 'none';
+      form.reset();
+    });
+  </script>
 </body>
 </html>
