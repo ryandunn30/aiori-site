@@ -12,7 +12,7 @@
       <!-- Logo replaces the text heading -->
       <img src="aiori_logo_FULL_WT_BG-05.png" alt="AIORI Logo" style="max-width: 100%; height: auto; margin-bottom: 1rem;" />
       
-      <form id="register-form">
+      <form id="register-form" onsubmit="return false;" novalidate>
         <input type="text" id="name" name="name" placeholder="Name" required autocomplete="name" />
         <input type="tel" id="phone" name="phone" placeholder="Phone Number" required autocomplete="tel" />
         <input type="email" id="email" name="email" placeholder="Email Address" required autocomplete="email" />
@@ -29,20 +29,46 @@
     </div>
   </div>
 
-  <script>
-    const form = document.getElementById('register-form');
-    const thankYouPopup = document.getElementById('thank-you-popup');
-    const closePopupBtn = document.getElementById('close-popup-btn');
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const FORM_URL = 'https://script.google.com/macros/s/AKfycbwAN6HgaDTOWJwTgKRBKtMG9JiTUVQBNLKZwwQftsDUreJvEKbOHKrGiHxMVM025mvetA/exec';
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      thankYouPopup.style.display = 'flex';
-    });
+  const form         = document.getElementById('register-form');
+  const thankYou     = document.getElementById('thank-you-popup');
+  const closePopup   = document.getElementById('close-popup-btn');
 
-    closePopupBtn.addEventListener('click', () => {
-      thankYouPopup.style.display = 'none';
-      form.reset();
-    });
-  </script>
+  form.addEventListener('submit', async e => {
+    e.preventDefault(); // (just in case)
+    // collect the field values
+    const payload = {
+      name:  form.name.value.trim(),
+      phone: form.phone.value.trim(),
+      email: form.email.value.trim(),
+    };
+
+    try {
+      const res  = await fetch(FORM_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (json.status === 'success') {
+        thankYou.style.display = 'flex';
+      } else {
+        throw new Error(json.message || 'Unknown error');
+      }
+    } catch (err) {
+      console.error('Submit error:', err);
+      alert('Submission failed. Please try again.');
+    }
+  });
+
+  closePopup.addEventListener('click', () => {
+    thankYou.style.display = 'none';
+    form.reset();
+  });
+});
+</script>
 </body>
 </html>
