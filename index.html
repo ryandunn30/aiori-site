@@ -12,16 +12,74 @@
       <!-- Logo replaces the text heading -->
       <img src="aiori_logo_FULL_WT_BG-05.png" alt="AIORI Logo" style="max-width: 100%; height: auto; margin-bottom: 1rem;" />
       
-      <form id="register-form" onsubmit="return false;" novalidate>
-        <input type="text" id="name" name="name" placeholder="Name" required autocomplete="name" />
-        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required autocomplete="tel" />
-        <input type="email" id="email" name="email" placeholder="Email Address" required autocomplete="email" />
-        <button type="submit" id="submit-btn">Submit</button>
-      </form>
+      
     </div>
   </div>
 
-  <!-- Thank You popup -->
+
+
+<form id="earlyAdopterForm">
+  <label>
+    Name (optional):
+    <input type="text" id="nameInput" name="name" />
+  </label>
+  <label>
+    Email (required):
+    <input type="email" id="emailInput" name="email" required />
+  </label>
+  <label>
+    Phone (optional):
+    <input type="tel" id="phoneInput" name="phone" />
+  </label>
+  <button type="submit">Sign Up</button>
+</form>
+
+<script>
+document.getElementById('earlyAdopterForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const name  = document.getElementById('nameInput').value.trim()  || null;
+  const email = document.getElementById('emailInput').value.trim();
+  const phone = document.getElementById('phoneInput').value.trim() || null;
+
+  // Basic client‑side validation
+  if (!email) {
+    alert('Email is required.');
+    return;
+  }
+
+  const payload = { email };
+  if (name)  payload.name  = name;
+  if (phone) payload.phone = phone;
+
+  try {
+    const response = await fetch('/api/early-adopters', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert('Thanks for signing up! 🎉');
+      // Optionally clear the form:
+      e.target.reset();
+    } else {
+      const errorText = await response.text();
+      console.error('Server error:', response.status, errorText);
+      alert('Sorry, there was a problem. Please try again later.');
+    }
+  } catch (err) {
+    console.error('Network error:', err);
+    alert('Network error — please check your connection and try again.');
+  }
+});
+</script>
+
+
+
+    <!-- Thank You popup -->
   <div id="thank-you-popup" role="dialog" aria-modal="true" aria-labelledby="thank-you-title">
     <div class="popup-content">
       <h3 id="thank-you-title">Thank You for Registering!</h3>
@@ -29,46 +87,9 @@
     </div>
   </div>
 
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const FORM_URL = 'https://script.google.com/macros/s/AKfycbx5HFT6Ho22GAQ0eQR4LL7WFh0y-eVciIpgaVKvHc_ImytVoQWRvY8E3l_9kkKU7aLgLg/exec';
 
-  const form         = document.getElementById('register-form');
-  const thankYou     = document.getElementById('thank-you-popup');
-  const closePopup   = document.getElementById('close-popup-btn');
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault(); // (just in case)
-    // collect the field values
-    const payload = {
-      name:  form.name.value.trim(),
-      phone: form.phone.value.trim(),
-      email: form.email.value.trim(),
-    };
-
-    try {
-      const res  = await fetch(FORM_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-      });
-      const json = await res.json();
-      if (json.status === 'success') {
-        thankYou.style.display = 'flex';
-      } else {
-        throw new Error(json.message || 'Unknown error');
-      }
-    } catch (err) {
-      console.error('Submit error:', err);
-      alert('Submission failed. Please try again.');
-    }
-  });
-
-  closePopup.addEventListener('click', () => {
-    thankYou.style.display = 'none';
-    form.reset();
-  });
-});
 </script>
+
+
 </body>
 </html>
