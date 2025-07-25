@@ -100,13 +100,21 @@ button#submit-btn:disabled {
 
 /* Thank You popup overlay */
 #thank-you-popup {
+  display: none;        /* hide initially */
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  display: none;
+  top: 0; left: 0;      /* full‑screen overlay */
+  width: 100%; height: 100%;
+  align-items: center;  /* center the .popup-content */
   justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0,0,0,0.6);
   z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
 }
 #thank-you-popup .popup-content {
   background: rgba(34, 34, 34, 0.95);
