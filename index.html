@@ -2,94 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AIORI Early Access Registration</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aiori</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="page-container">
-    <div id="register-box">
-      <!-- Logo replaces the text heading -->
-      <img src="aiori_logo_FULL_WT_BG-05.png" alt="AIORI Logo" style="max-width: 100%; height: auto; margin-bottom: 1rem;" />
-      
-      
+<div class="container">
+  <div class="left">
+    <!-- Replace with your main logo -->
+    <img src="../Resources/aiori-logo.png" alt="Aiori Logo">
+  </div>
+  <div class="right">
+    <img src="../Resources/brain-icon.png" alt="Aiori Icon" class="icon">
+    <div id="form-container">
+      <h2>Sign up to be notified on release</h2>
+      <form id="notify-form">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <button type="submit">Notify Me</button>
+      </form>
+    </div>
+    <!-- Success message container -->
+    <div id="success-message" class="hidden">
+      <div class="checkmark">✓</div>
+      <p>Thanks for your submission!</p>
     </div>
   </div>
-
-
-
-<form id="earlyAdopterForm">
-  <label>
-    Name (optional):
-    <input type="text" id="nameInput" name="name" />
-  </label>
-  <label>
-    Email (required):
-    <input type="email" id="emailInput" name="email" required />
-  </label>
-  <label>
-    Phone (optional):
-    <input type="tel" id="phoneInput" name="phone" />
-  </label>
-  <button type="submit">Sign Up</button>
-</form>
-
+</div>
+<!-- Script -->
 <script>
-document.getElementById('earlyAdopterForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
+    document.addEventListener('DOMContentLoaded', () => {
+        const formContainer = document.getElementById('form-container');
+        const form = document.getElementById('notify-form');
+        const successMessage = document.getElementById('success-message');
 
-  const name  = document.getElementById('nameInput').value.trim()  || null;
-  const email = document.getElementById('emailInput').value.trim();
-  const phone = document.getElementById('phoneInput').value.trim() || null;
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
 
-  // Basic client‑side validation
-  if (!email) {
-    alert('Email is required.');
-    return;
-  }
+            const payload = {
+                name: form.name.value.trim() || null,
+                email: form.email.value.trim(),
+                phone: form.phone.value.trim() || null
+            };
 
-  const payload = { email };
-  if (name)  payload.name  = name;
-  if (phone) payload.phone = phone;
+            try {
+                const res = await fetch('https://aiori-api-465948962485.us-central1.run.app/api/aiori/inquiry-request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-  try {
-    const response = await fetch('/api/early-adopters', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+                if (res.status === 201) {
+                    // Hide form and show success
+                    formContainer.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+                } else {
+                    console.error('Server error:', await res.text());
+                    alert('Oops—something went wrong.');
+                }
+            } catch (err) {
+                console.error('Network error:', err);
+                alert('Network error. Please try again.');
+            }
+        });
     });
-
-    if (response.ok) {
-      alert('Thanks for signing up! 🎉');
-      // Optionally clear the form:
-      e.target.reset();
-    } else {
-      const errorText = await response.text();
-      console.error('Server error:', response.status, errorText);
-      alert('Sorry, there was a problem. Please try again later.');
-    }
-  } catch (err) {
-    console.error('Network error:', err);
-    alert('Network error — please check your connection and try again.');
-  }
-});
 </script>
-
-
-
-    <!-- Thank You popup -->
-  <div id="thank-you-popup" role="dialog" aria-modal="true" aria-labelledby="thank-you-title">
-    <div class="popup-content">
-      <h3 id="thank-you-title">Thank You for Registering!</h3>
-      <button id="close-popup-btn">Close</button>
-    </div>
-  </div>
-
-
-</script>
-
-
 </body>
 </html>
+
