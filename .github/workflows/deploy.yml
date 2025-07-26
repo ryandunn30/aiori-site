@@ -18,7 +18,9 @@ jobs:
 
       - name: Sync files to GCS
         run: |
-          gsutil -m rsync -r ./public gs://aiori-website
+          # Sync everything in the repo root (index.html, styles.css, Resources/)
+          # Exclude the .github folder so you don’t push your workflows
+          gsutil -m rsync -r -x '^\.github/.*$' . gs://aiori-website
 
       - name: Invalidate CDN cache
         run: |
