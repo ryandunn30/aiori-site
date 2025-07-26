@@ -1,3 +1,4 @@
+# .github/workflows/deploy.yml
 name: Deploy to GCS + CDN
 
 on:
@@ -7,27 +8,28 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
-      # 1) Install gcloud & authenticate
-      - name: Set up gcloud & authenticate
+      # 1) Authenticate the runner to GCP via your service‑account JSON
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_AIORI_SITE_KEY }}
+
+      # 2) Install gcloud & gsutil and set the project
+      - name: Set up gcloud CLI
         uses: google-github-actions/setup-gcloud@v1
         with:
-          # this is the one secret containing your entire JSON key
-          service_account_key: ${{ secrets.GCP_AIORI_SITE_KEY }}
-          # export those credentials so gsutil can see them
-          export_default_credentials: true
-          # explicitly set your project (optional—but avoids needing fromJson)
           project_id: aiori-f3df9
+          install_components: gsutil
 
-      # 2) Sync files to your bucket
+      # 3) Now gsutil will see your ADC and have permission
       - name: Sync files to GCS
         run: |
           gsutil -m rsync -r -x '^\.github/.*$' . gs://aiori-website
 
-      # 3) Flush any old CDN caches
+      # 4) Invalidate CDN cache
       - name: Invalidate CDN cache
         run: |
           gcloud compute url-maps invalidate-cdn-cache aiori-app-map \
