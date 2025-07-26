@@ -11,21 +11,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up GCP CLI
+      # 1) Install gcloud & authenticate
+      - name: Set up gcloud & authenticate
         uses: google-github-actions/setup-gcloud@v1
         with:
-          # just your one JSON key secret
-          credentials_json: ${{ secrets.GCP_AIORI_SITE_KEY }}
-          # project_id is optional here—setup-gcloud will read it from the JSON.
-          # If you want to be explicit (no extra secret), you can also do:
-          # project_id: ${{ fromJson(secrets.GCP_AIORI_SITE_KEY).project_id }}
+          # this is the one secret containing your entire JSON key
+          service_account_key: ${{ secrets.GCP_AIORI_SITE_KEY }}
+          # export those credentials so gsutil can see them
+          export_default_credentials: true
+          # explicitly set your project (optional—but avoids needing fromJson)
+          project_id: aiori-f3df9
 
+      # 2) Sync files to your bucket
       - name: Sync files to GCS
         run: |
           gsutil -m rsync -r -x '^\.github/.*$' . gs://aiori-website
 
+      # 3) Flush any old CDN caches
       - name: Invalidate CDN cache
         run: |
           gcloud compute url-maps invalidate-cdn-cache aiori-app-map \
             --path "/*" --global
-
