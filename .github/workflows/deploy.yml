@@ -11,18 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Authenticate to GCP
-        uses: google-github-actions/auth@v1
+      - name: Set up GCP CLI
+        uses: google-github-actions/setup-gcloud@v1
         with:
+          # just your one JSON key secret
           credentials_json: ${{ secrets.GCP_AIORI_SITE_KEY }}
+          # project_id is optional here—setup-gcloud will read it from the JSON.
+          # If you want to be explicit (no extra secret), you can also do:
+          # project_id: ${{ fromJson(secrets.GCP_AIORI_SITE_KEY).project_id }}
 
       - name: Sync files to GCS
         run: |
-          # Sync everything in the repo root (index.html, styles.css, Resources/)
-          # Exclude the .github folder so you don’t push your workflows
           gsutil -m rsync -r -x '^\.github/.*$' . gs://aiori-website
 
       - name: Invalidate CDN cache
         run: |
           gcloud compute url-maps invalidate-cdn-cache aiori-app-map \
             --path "/*" --global
+
